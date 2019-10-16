@@ -22,7 +22,23 @@ $loggerDefinition->setArguments(
     ]
 );
 
+$loggerDefinition->addMethodCall(
+    'pushHandler',
+    [
+        new Reference('logger.std_out_handler')
+    ]
+);
+
+$loggerDefinition->addMethodCall(
+    'debug',
+    [
+        'The logger just got started'
+    ]
+);
+
 $container->setDefinition('logger', $loggerDefinition);
+
+//-------------------------------------------------------
 
 $handlerDefinition = new Definition('Monolog\Handler\StreamHandler');
 $handlerDefinition->setArguments(
@@ -30,7 +46,20 @@ $handlerDefinition->setArguments(
         __DIR__.'/din.log'
     ]
 );
+
 $container->setDefinition('logger.stream_handler', $handlerDefinition);
+
+//-------------------------------------------------------
+
+$stdOutLoggerDefinition = new Definition('Monolog\Handler\StreamHandler');
+$stdOutLoggerDefinition->setArguments(
+    [
+        'php://stdout'
+    ]
+);
+$container->setDefinition('logger.std_out_handler', $stdOutLoggerDefinition);
+
+//-------------------------------------------------------
 
 runApp($container);
 
