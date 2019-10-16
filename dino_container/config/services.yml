@@ -1,0 +1,9 @@
+services:
+    logger:
+        class: Monolog\Logger
+        arguments:
+            - 'main'
+            - ['@logger.stream_handler']
+        calls:
+            - [pushHandler, ['@logger.std_out_handler']]
+            - [debug, ['The logger just get started']]
