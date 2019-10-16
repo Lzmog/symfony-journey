@@ -1,0 +1,11 @@
+<div class="navbar-left tweets">
+    <p class="text-center">Tweets from T-Rex Probles</p>
+    <p>
+        {{ isLinux ? 'on a linux' : 'not on a linux' }}
+    </p>
+    <ul>
+        {% for tweet in tweets %}
+            <li>{{ tweet }}</li>
+        {% endfor %}
+    </ul>
+</div>
