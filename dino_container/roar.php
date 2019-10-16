@@ -4,30 +4,37 @@ declare(strict_types=1);
 
 namespace Dino\Play;
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 require __DIR__.'/../vendor/autoload.php';
 
 $container = new ContainerBuilder();
 
-$streamHandler = new StreamHandler(__DIR__.'/din.log');
-$container->set('logger.stream_handler', $streamHandler);
-
-$logger = new Logger(
-    'main',
+$loggerDefinition = new Definition('Monolog\Logger');
+$loggerDefinition->setArguments(
     [
-        $container->get('logger.stream_handler')
+        'main',
+        [
+            new Reference('logger.stream_handler')
+        ]
     ]
 );
 
-$container->set('logger', $logger);
+$container->setDefinition('logger', $loggerDefinition);
+
+$handlerDefinition = new Definition('Monolog\Handler\StreamHandler');
+$handlerDefinition->setArguments(
+    [
+        __DIR__.'/din.log'
+    ]
+);
+$container->setDefinition('logger.stream_handler', $handlerDefinition);
+
 runApp($container);
 
 function runApp(ContainerBuilder $container)
 {
     $container->get('logger')->info('ROOOOOAR');
 }
-
-
