@@ -1,3 +1,6 @@
+parameters:
+    logger_start_message: 'The logger just get started'
+
 services:
     logger:
         class: Monolog\Logger
@@ -6,4 +9,12 @@ services:
             - ['@logger.stream_handler']
         calls:
             - [pushHandler, ['@logger.std_out_handler']]
-            - [debug, ['The logger just get started']]
+            - [debug, ['%logger_start_message%']]
+
+    logger.stream_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%root_dir%/din.log']
+
+    logger.std_out_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['php://stdout']
